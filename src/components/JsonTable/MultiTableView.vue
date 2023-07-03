@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     getTables() {
-      getTableNames(this.$request).then(response => {
+      getTableNames(this.config.getTableNamesUri, this.$request).then(response => {
         this.tableNames = response.data.data;
         this.loaded = true;
       }).catch(error => {

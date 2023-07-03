@@ -1,22 +1,22 @@
 <template>
-  <div :class="{'hidden':hidden}" class="pagination-container">
-    <el-pagination
-      :background="background"
-      :current-page.sync="currentPage"
-      :page-size.sync="pageSize"
-      :layout="layout"
-      :page-sizes="pageSizes"
-      :pager-count="pagerCount"
-      :total="total"
-      v-bind="$attrs"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
-  </div>
+<div :class="{'hidden':hidden}" class="pagination-container">
+  <el-pagination
+    :background="background"
+    :current-page.sync="currentPage"
+    :page-size.sync="pageSize"
+    :layout="layout"
+    :page-sizes="pageSizes"
+    :pager-count="pagerCount"
+    :total="total"
+    v-bind="$attrs"
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+  />
+</div>
 </template>
 
 <script>
-import { scrollTo } from '@/utils/scroll-to'
+import {scrollTo} from '@/utils/scroll-to'
 
 export default {
   name: 'Pagination',
@@ -36,7 +36,7 @@ export default {
     pageSizes: {
       type: Array,
       default() {
-        return [10, 20, 30, 50]
+        return [10, 20, 30, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200]
       }
     },
     // 移动端页码按钮的数量端默认值5
@@ -62,8 +62,7 @@ export default {
     }
   },
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     currentPage: {
@@ -88,13 +87,13 @@ export default {
       if (this.currentPage * val > this.total) {
         this.currentPage = 1
       }
-      this.$emit('pagination', { page: this.currentPage, limit: val })
+      this.$emit('pagination', {page: this.currentPage, limit: val})
       if (this.autoScroll) {
         scrollTo(0, 800)
       }
     },
     handleCurrentChange(val) {
-      this.$emit('pagination', { page: val, limit: this.pageSize })
+      this.$emit('pagination', {page: val, limit: this.pageSize})
       if (this.autoScroll) {
         scrollTo(0, 800)
       }

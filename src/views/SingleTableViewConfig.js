@@ -1,8 +1,15 @@
 export default {
   "tableName": "course",
   "tableAlias": "Course",
+  "pageUri": '/table/json/page',
+  "getUri": '/table/json/get',
+  "createUri": '/table/json/create',
+  "updateUri": '/table/json/update',
+  "deleteUri": '/table/json/delete',
+  "exportExcelUri": '/table/json/export-excel',
+  "exportTableExcelUri": '/table/json/export-table-excel',
   "query": {
-    "show":true,
+    "show": true,
     "items": [
       {
         "name": "Id",
@@ -682,7 +689,7 @@ export default {
         "placeholder": "Please Input Update Time",
         "prop": {
           "type": "datetime",
-          "valueFormat":"yyyy-MM-dd HH:mm:ss",
+          "valueFormat": "yyyy-MM-dd HH:mm:ss",
         }
       },
       {

@@ -26,74 +26,8 @@
   <!-- 操作工具栏 -->
   <div v-show="config.toolBar.show">
     <el-row :gutter="10" class="mb8" style="display: flex">
-      <el-col :span="1.5" v-show="config.toolBar.addButtonShow">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-        >{{config.toolBar.addButtonName}}
-        </el-button>
-      </el-col>
-      <el-col :span="1.5" v-show="config.toolBar.exportButtonShow">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          :loading="exportLoading"
-          @click="handleExport"
-        >{{config.toolBar.exportButtonName}}
-        </el-button>
-      </el-col>
-      <el-col :span="1.5" v-show="config.toolBar.exportAllButtonShow">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          :loading="exportLoading"
-          @click="handleExportAll"
-        >{{config.toolBar.exportAllButtonName}}
-        </el-button>
-      </el-col>
-      <right-toolbar :show-search.sync="config.query.show" @queryTable="getList"/>
-
-      <el-dropdown>
-          <span class="el-dropdown-link">
-            <el-tooltip effect="dark" content="Show/Hide Search Item" placement="top">
-              <el-button size="mini" icon="el-icon-menu"/>
-            </el-tooltip>
-          </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-checkbox-group v-model="visibleSearchItems">
-            <el-checkbox v-for="column in config.query.items" :key="column.key" :label="column.key"
-                         :checked="column.show"
-                         @change="toggleQueryItem(column.key)">
-              {{ column.name }}
-            </el-checkbox>
-          </el-checkbox-group>
-        </el-dropdown-menu>
-      </el-dropdown>
-
-      <el-dropdown>
-          <span class="el-dropdown-link">
-            <el-tooltip effect="dark" content="Show/Hide Columns" placement="top">
-              <el-button size="mini" icon="el-icon-circle-plus"/>
-            </el-tooltip>
-
-          </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-checkbox-group v-model="visibleColumns">
-            <el-checkbox v-for="column in config.table.items" :key="column.key" :label="column.key"
-                         :checked="column.show"
-                         @change="toggleColumn(column.key)">
-              {{ column.name }}
-            </el-checkbox>
-          </el-checkbox-group>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <left-toolbar :config="config" :queryParams="queryParams" @queryTable="page"/>
+      <right-toolbar :show-search.sync="config.query.show" :config="config" @queryTable="page"/>
     </el-row>
   </div>
 
@@ -120,7 +54,8 @@
       <div class="cell-content">
         <span v-if="item.type === 'date'">{{ parseTime(scope.row[item.key]) }}</span>
         <span v-else>{{ scope.row[item.key] }}</span>
-        <el-tooltip content="Copy">
+        <el-tooltip content="Copy"
+                    v-if="isValueNotEmpty(scope.row[item.key]) && scope.row[item.key].length > 6">
           <el-button class="copy-button" @click="copyToClipboard(scope.row[item.key])"
                      icon="el-icon-document-copy" circle></el-button>
         </el-tooltip>
@@ -157,42 +92,21 @@
     :total="total"
     :page.sync="queryParams.pageNo"
     :limit.sync="queryParams.pageSize"
-    @pagination="getList"
+    @pagination="page"
   />
 
-  <el-dialog :visible="contentDialogVisible" @close="contentDialogVisible = false" :title="contentDialogTitle">
+  <el-dialog :visible="contentDialogVisible" @close="contentDialogVisible = false"
+             :title="contentDialogTitle">
     <span>{{ contentDialogContent }}</span>
   </el-dialog>
-  <!-- 对话框(添加 / 修改) -->
-  <el-dialog v-dialogDrag :title="title" :visible.sync="open" :width="config.form.width" append-to-body>
-    <el-form ref="form" :model="form" :rules="rules" :label-width="config.form.labelWidth">
 
-      <el-form-item v-for="(item, index) in config.form.items" :key="index" :label="item.name"
-                    :prop="item.key" v-if="item.show">
-
-        <el-input v-if="item.type === 'varchar'" v-model="form[item.key]"
-                  :placeholder="item.placeholder"/>
-
-        <el-date-picker v-else-if="item.type === 'date'" v-model="form[item.key]"
-                        clearable :type="item.prop.type" :value-format="item.prop.valueFormat"
-                        :placeholder="item.placeholder"/>
-      </el-form-item>
-    </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="submitForm">{{config.form.button.confimButtonName}}</el-button>
-      <el-button @click="cancel">{{config.form.button.cancelButtonName}}</el-button>
-    </div>
-  </el-dialog>
 </div>
 </template>
 <script>
 import {
-  createRecord,
-  updateRecord,
   deleteRecord,
   getRecord,
   pageRecord,
-  exportTableExcel, exportExcel
 } from './tableToJson'
 
 export default {
@@ -209,42 +123,26 @@ export default {
       showIdColumn: false,
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
       // 总条数
       total: 0,
       // 列表
       list: [],
-      // 弹出层标题6
-      title: '',
-      // 是否显示弹出层
-      open: false,
       // 查询参数
       queryParams: {
         tableName: this.config.tableName,
         pageNo: 1,
         pageSize: 10,
       },
-      // 表单参数
-      form: {
-        tableName: this.config.tableName,
-      },
-      // 表单校验
-      rules: {},
-      //显示的列
-      visibleColumns: [],
-      //显示的搜索列
-      visibleSearchItems: [],
       //内容对话框
       contentDialogVisible: false,
       contentDialogContent: '',
-      contentDialogTitle:'',
+      contentDialogTitle: '',
     }
   },
   created() {
     window.a = this;
     this.initializeQueryParams();
-    this.getList()
+    this.page()
   },
   methods: {
     initializeQueryParams() {
@@ -256,58 +154,34 @@ export default {
         ...this.config.query.operator
       };
     },
-    /** 查询列表 */
-    getList() {
-      this.loading = true;
-      // 执行查询
-      pageRecord(this.$request, this.queryParams).then(response => {
-        this.list = response.data.data.list;
-        this.total = response.data.data.total;
-        this.loading = false
-      })
-    },
-    toggleItem(items, key) {
-      const item = items.find(item => item.key === key);
-      if (item) item.show = !item.show;
-    },
-    toggleColumn(key) {
-      this.toggleItem(this.config.table.items, key);
-    },
-    toggleQueryItem(key) {
-      this.toggleItem(this.config.query.items, key);
-    },
-    /** 取消按钮 */
-    cancel() {
-      this.open = false;
-      this.reset()
-    },
-    /** 表单重置 */
-    reset() {
-      this.form = {
-        tableName: this.config.tableName,
-      };
-      this.resetForm('form')
-    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNo = 1;
-      this.getList()
+      this.page()
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm('queryForm');
       this.handleQuery()
     },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = 'Add ' + this.config.tableAlias
+
+    isValueNotEmpty(value) {
+      return value !== null && value !== undefined && value !== "";
+    },
+    /** 分页 */
+    page() {
+      this.loading = true;
+      // 执行查询
+      pageRecord(this.config.pageUri, this.$request, this.queryParams).then(response => {
+        this.list = response.data.data.list;
+        this.total = response.data.data.total;
+        this.loading = false
+      })
     },
     /** 修改按钮操作 */
     async handleUpdate(row) {
       this.reset();
-      const {data} = await getRecord(this.$request, this.config.tableName, row.id);
+      const {data} = await getRecord(this.config.getUri, this.$request, this.config.tableName, row.id);
       this.form = {
         ...data.data,
         tableName: this.config.tableName,
@@ -315,26 +189,7 @@ export default {
       this.open = true;
       this.title = 'Edit ' + this.config.tableAlias
     },
-    /** 验证并提交表单 */
-    submitForm() {
-      this.$refs['form'].validate(valid => {
-        if (valid) {
-          const method = this.form.id ? updateRecord : createRecord;
-          this.handleSubmit(method(this.$request, this.form), this.form.id ? 'Update' : 'Add')
-        }
-      })
-    },
 
-    async handleSubmit(promise, action) {
-      const {data} = await promise;
-      if (data.data) {
-        this.$modal.msgSuccess(`${action} Successfully`);
-        this.open = false;
-        this.getList();
-      } else {
-        this.$modal.msgError(`${action} Failed`)
-      }
-    },
     /** 删除按钮操作 */
     handleDelete(row) {
       this.$confirm('Are you sure you want to delete this item?', 'Tip', {
@@ -342,8 +197,8 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        deleteRecord(this.$request, this.config.tableName, row.id).then(() => {
-          this.getList();
+        deleteRecord(this.config.deleteUri, this.$request, this.config.tableName, row.id).then(() => {
+          this.page();
           this.$message({
             type: 'success',
             message: 'Delete successful!'
@@ -356,33 +211,7 @@ export default {
         });
       });
     },
-    // 代码优化: 导出数据的方法抽象
-    handleExport(isAll = false) {
-      debugger;
-      const params = isAll ? {} : this.queryParams;
-      const confirmMessage = `Confirm whether to export ${isAll ? 'all' : 'current'} data items?`;
-      const downloadFilename = `${this.config.tableName}${isAll ? '-all' : '-export'}.xlsx`;
 
-      this.$modal.confirm(confirmMessage).then(() => {
-        this.exportLoading = true;
-        return isAll ? exportTableExcel(this.$request, this.config.tableName) : exportExcel(this.$request, params)
-      }).then(response => {
-        this.$download.excel(response.data, downloadFilename);
-        this.exportLoading = false
-      }).catch((e) => {
-        console.log(e)
-      })
-    },
-
-    /** 导出部分数据操作 */
-    handlePartialExport() {
-      this.handleExport(false)
-    },
-
-    /** 导出所有数据操作 */
-    handleExportAll() {
-      this.handleExport(true)
-    },
     copyToClipboard(text) {
       navigator.clipboard.writeText(text).then(() => {
         // 复制成功
@@ -394,7 +223,7 @@ export default {
     },
     showContentDialog(row, column) {
       this.contentDialogVisible = true;
-      this.contentDialogTitle=column.label;
+      this.contentDialogTitle = column.label;
       this.contentDialogContent = row[column.property];
       // console.log(row)--> 所在列的数据
       // console.log(column) // 所在行的描述

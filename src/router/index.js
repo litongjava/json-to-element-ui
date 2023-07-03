@@ -10,6 +10,11 @@ const routes = [
     name: 'home',
     component: HomeView
   },
+  {
+    path: '/SingleTableViewWithConfig',
+    name: 'SingleTableViewWithConfig',
+    component: ()=>import('../views/SingleTableViewWithConfig')
+  },
 ];
 
 const router = new VueRouter({

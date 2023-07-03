@@ -135,3 +135,13 @@ dist.zip
 package-lock.json
 *.lock
 *.tgz
+
+babel.config.js
+jsconfig.json
+vue.config.js
+registerServiceWorker.js
+main.js
+request.js
+App.vue
+router
+views

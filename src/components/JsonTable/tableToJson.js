@@ -1,50 +1,68 @@
 // 创建元组
-export function createRecord(request, data) {
+export function createRecord(uri, request, data) {
+  if (!uri) {
+    uri = '/table/json/create';
+  }
   return request({
-    url: '/table/json/create',
+    url: uri,
     method: 'post',
     data: data
   })
 }
 
 // 更新元组
-export function updateRecord(request, data) {
+export function updateRecord(uri, request, data) {
+  if (!uri) {
+    uri = '/table/json/update'
+  }
   return request({
-    url: '/table/json/update',
+    url: uri,
     method: 'put',
     data: data
   })
 }
 
 // 删除元组
-export function deleteRecord(request, tableName, id) {
+export function deleteRecord(uri, request, tableName, id) {
+  if (!uri) {
+    uri = '/table/json/delete'
+  }
   return request({
-    url: '/table/json/delete?tableName=' + tableName + '&id=' + id,
+    url: uri + '?tableName=' + tableName + '&id=' + id,
     method: 'delete'
   })
 }
 
 // 获得元组
-export function getRecord(request, tableName, id) {
+export function getRecord(uri, request, tableName, id) {
+  if (!uri) {
+    uri = '/table/json/get'
+  }
   return request({
-    url: '/table/json/get?tableName=' + tableName + '&id=' + id,
+    url: uri + '?tableName=' + tableName + '&id=' + id,
     method: 'get'
   })
 }
 
 // 获得元组分页
-export function pageRecord(request, query) {
+export function pageRecord(uri, request, query) {
+  if (!uri) {
+    uri = '/table/json/page'
+  }
   return request({
-    url: '/table/json/page',
+    url: uri,
     method: 'post',
     data: query
   })
 }
 
 // 导出Excel
-export function exportExcel(request, query) {
+export function exportExcel(uri, request, query) {
+  if (!uri) {
+    uri = '/table/json/export-excel'
+  }
   return request({
-    url: '/table/json/export-excel',
+    url: uri,
     method: 'get',
     params: query,
     responseType: 'blob'
@@ -52,42 +70,57 @@ export function exportExcel(request, query) {
 }
 
 // 导出Excel
-export function exportTableExcel(request, tableName) {
+export function exportTableExcel(uri, request, tableName) {
+  if (!uri) {
+    uri = '/table/json/export-table-excel'
+  }
   return request({
-    url: '/table/json/export-table-excel?tableName=' + tableName,
+    url: uri + '?tableName=' + tableName,
     method: 'get',
     responseType: 'blob'
   })
 }
 
 // 导出 Excel
-export function exportAllTableExcel(request) {
+export function exportAllTableExcel(uri, request) {
+  if (!uri) {
+    uri = '/table/json/export-all-table-excel'
+  }
   return request({
-    url: '/table/json/export-all-table-excel',
+    url: uri,
     method: 'get',
     responseType: 'blob'
   })
 }
 
-export function exportAlarmAiExcel(query) {
+export function exportAlarmAiExcel(uri, query) {
+  if (!uri) {
+    uri = '/cf/alarm-ai/export-excel'
+  }
   return request({
-    url: '/cf/alarm-ai/export-excel',
+    url: uri,
     method: 'get',
     params: query,
     responseType: 'blob'
   })
 }
 
-export function getTableNames(request) {
+export function getTableNames(uri, request) {
+  if (!uri) {
+    uri = '/table/json/table-names'
+  }
   return request({
-    url: '/table/json/table-names',
+    url: uri,
     method: 'get',
   })
 }
 
-export function getTableConfig(request, query) {
+export function getTableConfig(uri, request, query) {
+  if (!uri) {
+    uri = '/table/json/table-config'
+  }
   return request({
-    url: '/table/json/table-config',
+    url: uri,
     method: 'post',
     data: query,
   })

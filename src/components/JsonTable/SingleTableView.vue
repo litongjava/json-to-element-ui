@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { getTableConfig } from './tableToJson'
+import {getTableConfig} from './tableToJson'
 
 export default {
   name: "SingleTableView",
@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     getConfig() {
-      getTableConfig(this.$request, this.config).then(response => {
+      getTableConfig(this.config.getTableConfigUri, this.$request, this.config).then(response => {
         this.singleTableViewConfig = response.data.data;
       })
     },
