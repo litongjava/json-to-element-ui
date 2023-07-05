@@ -9,6 +9,7 @@ Vue.prototype.$request = request;
 
 // JsonTable start
 import JsonToElmentUI from '../index';
+
 Vue.use(JsonToElmentUI);
 // JsonTable end
 Vue.config.productionTip = false;

@@ -3,7 +3,7 @@
 * Copyright (c) 2021 ruoyi
 */
 
-import Clipboard from '@/directive/module/clipboard'
+import Clipboard from 'clipboard'
 export default {
   bind(el, binding, vnode) {
     switch (binding.arg) {
