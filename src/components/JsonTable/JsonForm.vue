@@ -34,6 +34,11 @@ export default {
       type: Object,
       required: true,
     },
+    // 表单参数
+    form: {
+      type: Object,
+      required: true
+    },
     showDialog: {
       type: Boolean,
       default: true
@@ -45,10 +50,7 @@ export default {
   },
   data() {
     return {
-      // 表单参数
-      form: {
-        tableName: this.config.tableName,
-      },
+
       // 表单校验
       rules: {},
     }
@@ -69,7 +71,7 @@ export default {
       const {data} = await promise;
       if (data.data) {
         this.$modal.msgSuccess(`${action} Successfully`);
-        this.$emit("closeDialog");
+        this.closeDialog()
         this.queryTable();
       } else {
         this.$modal.msgError(`${action} Failed`)
@@ -82,9 +84,6 @@ export default {
     },
     /** 表单重置 */
     reset() {
-      this.form = {
-        tableName: this.config.tableName,
-      };
       this.resetForm('form')
     },
     closeDialog() {

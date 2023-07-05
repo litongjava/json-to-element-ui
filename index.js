@@ -1,7 +1,9 @@
 import RightToolbar from './src/components/toolbar/RightToolBar';
 import LeftToolbar from './src/components/toolbar/LeftToolBar';
 import Pagination from './src/components/Pagination/index';
+import JsonQueryForm from './src/components/JsonTable/JsonQueryForm';
 import JsonForm from './src/components/JsonTable/JsonForm';
+import JsonTable from './src/components/JsonTable/JsonTable';
 import JsonSingleTable from './src/components/JsonTable/SingleTable';
 import JsonSingleTableView from './src/components/JsonTable/SingleTableView';
 import JsonMultiTableView from './src/components/JsonTable/MultiTableView';
@@ -16,6 +18,8 @@ export default {
     Vue.component('LeftToolbar', LeftToolbar);
     Vue.component('Pagination', Pagination);
     Vue.component('JsonForm', JsonForm);
+    Vue.component('JsonTable', JsonTable);
+    Vue.component('JsonQueryForm', JsonQueryForm);
     Vue.component('JsonSingleTable', JsonSingleTable);
     Vue.component('JsonSingleTableView', JsonSingleTableView);
     Vue.component('JsonMultiTableView', JsonMultiTableView);

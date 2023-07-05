@@ -13,12 +13,11 @@
     </ul>
   </div>
   <div class="right-panel">
-    <component
+    <component v-for="(item, index) in tableNames" :key="index"
       :is="currentTab === item ? 'json-single-table-view' : ''"
-      :config="tabConfigs[index]"
-      v-for="(item, index) in tableNames"
-      :key="index"
-    />
+      :config="tabConfigs[index]" v-if="currentTab==item" />
+
+
   </div>
 </div>
 </template>

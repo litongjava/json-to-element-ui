@@ -32,8 +32,8 @@
     >{{config.toolBar.exportAllButtonName}}
     </el-button>
   </el-col>
-  <json-form :config="config" :showDialog="open" @closeDialog="closeDialog" title="title"
-             @queryTable="$emit('queryTable')"/>
+  <json-form :config="config" :showDialog="open" @closeDialog="closeDialog" :title="title"
+             @queryTable="$emit('queryTable')" :form="form"/>
 </div>
 </template>
 
@@ -60,6 +60,8 @@ export default {
       open: false,
       // 导出遮罩层
       exportLoading: false,
+      // 表单数据
+      form: {}
     }
   },
   methods: {
@@ -67,6 +69,9 @@ export default {
     handleAdd() {
       this.open = true;
       this.title = 'Add ' + this.config.tableAlias
+      this.form = {
+        tableName: this.config.tableName,
+      };
     },
     closeDialog() {
       this.open = false;
