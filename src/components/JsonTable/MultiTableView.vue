@@ -1,14 +1,30 @@
 <template>
-<el-tabs tab-position="left" v-if="loaded" @tab-click="handleTabClick">
-  <el-tab-pane v-for="(item, index) in tableNames" :key="index" :label="item">
-    <component :is="currentTab === item ? 'json-single-table-view' : ''" :config="tabConfigs[index]"/>
-  </el-tab-pane>
-</el-tabs>
+<div class="container">
+  <div class="left-panel">
+    <ul>
+      <li
+        v-for="(item, index) in tableNames"
+        :key="index"
+        @click="selectTab(item)"
+        :class="{ active: currentTab === item }"
+      >
+        {{ item }}
+      </li>
+    </ul>
+  </div>
+  <div class="right-panel">
+    <component
+      :is="currentTab === item ? 'json-single-table-view' : ''"
+      :config="tabConfigs[index]"
+      v-for="(item, index) in tableNames"
+      :key="index"
+    />
+  </div>
+</div>
 </template>
 
 <script>
 import {getTableNames} from "./tableToJson";
-
 export default {
   name: "MultiTableView",
   props: {
@@ -47,9 +63,43 @@ export default {
           this.loaded = false;
         });
     },
-    handleTabClick(tab) {
-      this.currentTab = tab.label;
-    },
-  },
+    selectTab(item) {
+      this.currentTab = item;
+    }
+  }
 };
 </script>
+
+<style scoped>
+  .container {
+    padding: 0;
+    margin: 0;
+    display: flex;
+  }
+
+  .left-panel {
+    width: 200px;
+    height: 100vh;
+    overflow-y: scroll;
+  }
+
+  .left-panel ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .left-panel li {
+    cursor: pointer;
+    padding: 10px;
+  }
+
+  .left-panel li.active {
+    background-color: lightgray;
+  }
+
+  .right-panel {
+    flex: 1;
+    padding: 0px;
+  }
+</style>
