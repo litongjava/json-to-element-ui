@@ -134,4 +134,8 @@ dist/
 dist.zip
 package-lock.json
 *.lock
-*.tgz
+local.properties
+.cxx
+.externalNativeBuild
+/captures
+/build
