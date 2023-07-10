@@ -25,8 +25,9 @@
         <span v-else>{{ scope.row[item.key] }}</span>
         <el-tooltip content="Copy"
                     v-if="isValueNotEmpty(scope.row[item.key]) && scope.row[item.key].length > 6">
-          <el-button class="copy-button" @click="copyToClipboard(scope.row[item.key])"
-                     icon="el-icon-document-copy" circle></el-button>
+          <el-button class="copy-button" v-clipboard:copy="scope.row[item.key]"
+                     v-clipboard:success="onCopySuccess" v-clipboard:error="onCopyError"
+                     icon="el-icon-document-copy" circle/>
         </el-tooltip>
       </div>
       </template>
@@ -159,14 +160,13 @@ export default {
       });
     },
 
-    copyToClipboard(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        // 复制成功
-        this.$modal.msgSuccess('Copy Successfully');
-      }).catch((e) => {
-        // 复制失败
-        this.$modal.msgError('Copy Failed:' + e);
-      });
+    onCopySuccess(e) {
+      // 复制成功
+      this.$modal.msgSuccess('Copy Successfully');
+    },
+    onCopyError(e) {
+      // 复制失败
+      this.$modal.msgError('Copy Failed:' + e);
     },
     showContentDialog(row, column) {
       this.contentDialogVisible = true;
