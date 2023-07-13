@@ -6,12 +6,14 @@
     <el-input v-if="item.type === 'varchar'" v-model="queryParams[item.key]"
               :placeholder="item.placeholder" clearable @keyup.enter.native="handleQuery"/>
 
-    <el-date-picker v-else-if="item.type === 'date'" v-model="queryParams[item.key]"
-                    style="width: 240px" value-format="yyyy-MM-dd HH:mm:ss" type="daterange"
+    <el-date-picker v-else-if="item.type === 'date'"
+                    v-model="queryParams[item.key]"
+                    :value-format="item.prop.valueFormat" :type="item.prop.type"
                     :range-separator="item.prop.rangeSeparator"
                     :start-placeholder="item.prop.startPlaceholder"
                     :end-placeholder="item.prop.endPlaceholder"
-                    :default-time="item.prop.defaultTime"/>
+                    :default-time="item.prop.defaultTime"
+    />
   </el-form-item>
   <el-form-item>
     <el-button type="primary" icon="el-icon-search" @click="handleQuery">
@@ -35,6 +37,9 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  created() {
+    console.log("config",this.config);
   },
   methods:{
     /** 搜索按钮操作 */

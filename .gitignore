@@ -139,3 +139,4 @@ local.properties
 .externalNativeBuild
 /captures
 /build
+*.tgz

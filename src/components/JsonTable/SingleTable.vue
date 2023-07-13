@@ -1,5 +1,5 @@
 <template>
-<div class="app-container">
+<div class="single-table-container">
   <!-- 搜索工作栏 -->
   <json-query-form :config="config" :queryParams.sync="queryParams" @queryTable="page"/>
   <!-- 操作工具栏 -->

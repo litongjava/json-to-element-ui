@@ -1,29 +1,35 @@
 <template>
-<div class="container">
-  <div class="left-panel">
+<div class="multi-table-container">
+  <div class="left-panel" v-if="loaded">
     <ul>
       <li
         v-for="(item, index) in tableNames"
         :key="index"
-        @click="selectTab(item)"
+        @click="addTab(index,item)"
         :class="{ active: currentTab === item }"
       >
-        {{ item }}
+        {{item }}
       </li>
     </ul>
   </div>
   <div class="right-panel">
-    <component v-for="(item, index) in tableNames" :key="index"
-      :is="currentTab === item ? 'json-single-table-view' : ''"
-      :config="tabConfigs[index]" v-if="currentTab==item" />
-
-
+    <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
+      <el-tab-pane
+        v-for="(item, index) in editableTabs"
+        :key="item.name"
+        :label="item.title"
+        :name="item.name"
+      >
+        <json-single-table-view :config="tabConfigs[index]"/>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </div>
 </template>
 
 <script>
 import {getTableNames} from "./tableToJson";
+
 export default {
   name: "MultiTableView",
   props: {
@@ -34,9 +40,11 @@ export default {
   },
   data() {
     return {
+      editableTabsValue: undefined,
+      editableTabs: [],
+
       tableNames: [],
       loaded: false,
-      currentTab: 0,
       tabConfigs: [],
     };
   },
@@ -62,15 +70,45 @@ export default {
           this.loaded = false;
         });
     },
-    selectTab(item) {
-      this.currentTab = item;
+    addTab(index, tableName) {
+      let newTabName = index + '';
+      let existingTab = this.editableTabs.find(tab => tab.name === newTabName);
+      if (existingTab) {
+        // If the tab already exists, switch to it
+        this.editableTabsValue = newTabName;
+      } else {
+        // If the tab does not exist, add it
+        this.editableTabs.push({
+          title: tableName,
+          name: newTabName,
+        });
+        this.editableTabsValue = newTabName;
+      }
+    },
+
+    removeTab(targetName) {
+      let tabs = this.editableTabs;
+      let activeName = this.editableTabsValue;
+      if (activeName === targetName) {
+        tabs.forEach((tab, index) => {
+          if (tab.name === targetName) {
+            let nextTab = tabs[index + 1] || tabs[index - 1];
+            if (nextTab) {
+              activeName = nextTab.name;
+            }
+          }
+        });
+      }
+
+      this.editableTabsValue = activeName;
+      this.editableTabs = tabs.filter(tab => tab.name !== targetName);
     }
   }
 };
 </script>
 
 <style scoped>
-  .container {
+  .multi-table-container {
     padding: 0;
     margin: 0;
     display: flex;
@@ -79,7 +117,8 @@ export default {
   .left-panel {
     width: 200px;
     height: 100vh;
-    overflow-y: scroll;
+    flex:1;
+    overflow-y: auto; /* 添加这一行 */
   }
 
   .left-panel ul {
@@ -98,7 +137,9 @@ export default {
   }
 
   .right-panel {
-    flex: 1;
+    width: 90vh;
+    height: 70vh;
+    flex: 11;
     padding: 0px;
   }
 </style>

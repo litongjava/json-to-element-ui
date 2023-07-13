@@ -1,7 +1,7 @@
 <template>
 <div>
   <!-- 列表 -->
-  <el-table v-loading="loading" :data="list" @row-dblclick="showContentDialog">
+  <el-table v-loading="loading" :data="list" @row-dblclick="showContentDialog" :row-style="{ height: '30px' }">
     <el-table-column align="center" type="selection" width="50" v-if="config.table.selectionShow"/>
     <el-table-column label="No." prop="num" align="center" width="100" v-if="config.table.numberShow">
       <template slot-scope="row">
@@ -162,7 +162,7 @@ export default {
 
     onCopySuccess(e) {
       // 复制成功
-      this.$modal.msgSuccess('Copy Successfully');
+      this.$modal.msgSuccess('Copy Successf ully');
     },
     onCopyError(e) {
       // 复制失败
@@ -198,5 +198,8 @@ export default {
 
   .el-table .cell:hover .copy-button {
     visibility: visible;
+  }
+  ::v-deep .el-table .el-table__cell{
+    padding:5px !important;
   }
 </style>
