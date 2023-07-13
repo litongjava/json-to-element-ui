@@ -3,12 +3,12 @@
   <div class="left-panel" v-if="loaded">
     <ul>
       <li
-        v-for="(item, index) in tableNames"
+        v-for="(item, index) in tabConfigs"
         :key="index"
-        @click="addTab(index,item)"
-        :class="{ active: currentTab === item }"
+        @click="addTab(index,item.tableName)"
+        :class="{ active: tabIndex === index }"
       >
-        {{item }}
+        {{item.tableName }}
       </li>
     </ul>
   </div>
@@ -20,7 +20,7 @@
         :label="item.title"
         :name="item.name"
       >
-        <json-single-table-view :config="tabConfigs[index]"/>
+        <json-single-table-view :config="tabConfigs[tabIndex]"/>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -43,9 +43,9 @@ export default {
       editableTabsValue: undefined,
       editableTabs: [],
 
-      tableNames: [],
       loaded: false,
       tabConfigs: [],
+      tabIndex: 0
     };
   },
   created() {
@@ -59,11 +59,11 @@ export default {
           if (this.tableNames.length > 0) {
             this.currentTab = this.tableNames[0];
           }
-          this.loaded = true;
           this.tabConfigs = this.tableNames.map((tableName) => ({
             tableName,
             lang: this.config.lang,
           }));
+          this.loaded = true;
         })
         .catch((error) => {
           console.error("Failed to load table names:", error);
@@ -71,6 +71,7 @@ export default {
         });
     },
     addTab(index, tableName) {
+      this.tabIndex = index;
       let newTabName = index + '';
       let existingTab = this.editableTabs.find(tab => tab.name === newTabName);
       if (existingTab) {
@@ -117,7 +118,7 @@ export default {
   .left-panel {
     width: 200px;
     height: 100vh;
-    flex:1;
+    flex: 1;
     overflow-y: auto; /* 添加这一行 */
   }
 

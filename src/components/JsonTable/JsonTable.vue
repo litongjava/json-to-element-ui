@@ -33,9 +33,12 @@
       </template>
     </el-table-column>
 
+    <!-- 在所有其他列之后添加新的插槽 -->
+    <slot name="extra-columns"></slot>
+
     <el-table-column label="Operation" :align="config.table.operation.align"
                      class-name="small-padding fixed-width"
-                     v-if="config.table.operation.show">
+                     v-if="config.table.operation.show" width="120">
       <template v-slot="scope">
       <el-button
         size="mini"
@@ -199,7 +202,9 @@ export default {
   .el-table .cell:hover .copy-button {
     visibility: visible;
   }
-  ::v-deep .el-table .el-table__cell{
-    padding:5px !important;
+  fixed-width{
+    display: flex;
+    /*按钮之间平均分布*/
+    justify-content: space-between;
   }
 </style>

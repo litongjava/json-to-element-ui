@@ -1,5 +1,6 @@
 <template>
-<json-single-table v-if="loaded" :config="singleTableViewConfig"></json-single-table>
+<json-single-table v-if="loaded" :config="singleTableViewConfig">
+</json-single-table>
 </template>
 
 <script>

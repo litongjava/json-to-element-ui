@@ -38,9 +38,6 @@ export default {
       required: true,
     },
   },
-  created() {
-    console.log("config",this.config);
-  },
   methods:{
     /** 搜索按钮操作 */
     handleQuery() {

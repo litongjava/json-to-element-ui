@@ -9,8 +9,13 @@
       <right-toolbar :show-search.sync="config.query.show" :config="config" @queryTable="page"/>
     </el-row>
   </div>
-  <json-table :config="config" :loading.sync="loading" :total.sync="total" :list.sync="list" :queryParams="queryParams"
-              @queryTable="page"/>
+  <json-table :config="config" :loading.sync="loading" :total.sync="total" :list.sync="list"
+              :queryParams="queryParams"
+              @queryTable="page">
+    <template v-slot:extra-columns>
+    <slot name="extra-columns"/>
+    </template>
+  </json-table>
 </div>
 </template>
 <script>
