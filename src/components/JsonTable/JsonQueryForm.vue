@@ -6,6 +6,9 @@
     <el-input v-if="item.type === 'varchar'" v-model="queryParams[item.key]"
               :placeholder="item.placeholder" clearable @keyup.enter.native="handleQuery"/>
 
+    <el-input v-else-if="item.type === 'bool'" v-model="queryParams[item.key]"
+              :placeholder="item.placeholder" clearable @keyup.enter.native="handleQuery"/>
+
     <el-date-picker v-else-if="item.type === 'date'"
                     v-model="queryParams[item.key]"
                     :value-format="item.prop.valueFormat" :type="item.prop.type"

@@ -5,10 +5,10 @@
       <li
         v-for="(item, index) in tabConfigs"
         :key="index"
-        @click="addTab(index,item.tableName)"
+        @click="addTab(index,item.f)"
         :class="{ active: tabIndex === index }"
       >
-        {{item.tableName }}
+        {{item.f }}
       </li>
     </ul>
   </div>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import {getTableNames} from "./tableToJson";
+import {getFNames} from "./tableToJson";
 
 export default {
   name: "MultiTableView",
@@ -53,14 +53,14 @@ export default {
   },
   methods: {
     getTables() {
-      getTableNames(this.config.getTableNamesUri, this.$request)
+      getFNames(this.config.getFNamesUri, this.$request)
         .then((response) => {
-          this.tableNames = response.data.data;
-          if (this.tableNames.length > 0) {
-            this.currentTab = this.tableNames[0];
+          this.fNames = response.data.data;
+          if (this.fNames.length > 0) {
+            this.currentTab = this.fNames[0];
           }
-          this.tabConfigs = this.tableNames.map((tableName) => ({
-            tableName,
+          this.tabConfigs = this.fNames.map((f) => ({
+            f,
             lang: this.config.lang,
           }));
           this.loaded = true;
@@ -70,7 +70,7 @@ export default {
           this.loaded = false;
         });
     },
-    addTab(index, tableName) {
+    addTab(index, f) {
       this.tabIndex = index;
       let newTabName = index + '';
       let existingTab = this.editableTabs.find(tab => tab.name === newTabName);
@@ -80,7 +80,7 @@ export default {
       } else {
         // If the tab does not exist, add it
         this.editableTabs.push({
-          title: tableName,
+          title: f,
           name: newTabName,
         });
         this.editableTabsValue = newTabName;

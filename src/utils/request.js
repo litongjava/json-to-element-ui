@@ -39,7 +39,7 @@ const errorHandle = (status, info) => {
 
 const instance = axios.create({
   // 公共配置
-  baseURL:"http://127.0.0.1:18063",
+  baseURL:"http://127.0.0.1:8080",
   timeout: 50000,
   // withCredentials: true
 });

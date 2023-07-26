@@ -1,5 +1,5 @@
 export default {
-  "tableName": "course",
+  "f": "course",
   "tableAlias": "Course",
   "pageUri": '/table/json/page',
   "getUri": '/table/json/get',

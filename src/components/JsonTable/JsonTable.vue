@@ -22,6 +22,7 @@
       <template v-slot="scope">
       <div class="cell-content">
         <span v-if="item.type === 'date'">{{ parseTime(scope.row[item.key]) }}</span>
+        <span v-else-if="item.type === 'bool'">{{ scope.row[item.key] }}</span>
         <span v-else>{{ scope.row[item.key] }}</span>
         <el-tooltip content="Copy"
                     v-if="isValueNotEmpty(scope.row[item.key]) && scope.row[item.key].length > 6">
@@ -132,10 +133,9 @@ export default {
     },
     /** 修改按钮操作 */
     async handleUpdate(row) {
-      const {data} = await getRecord(this.config.getUri, this.$request, this.config.tableName, row.id);
+      const {data} = await getRecord(this.config.getUri, this.$request, this.config.f, row.id);
       this.form = {
         ...data.data,
-        tableName: this.config.tableName,
       };
       this.open = true;
       this.title = 'Edit ' + this.config.tableAlias
@@ -148,7 +148,7 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        deleteRecord(this.config.deleteUri, this.$request, this.config.tableName, row.id).then(() => {
+        deleteRecord(this.config.deleteUri, this.$request, this.config.f, row.id).then(() => {
           this.$emit('queryTable');
           this.$message({
             type: 'success',

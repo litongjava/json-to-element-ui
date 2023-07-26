@@ -70,7 +70,7 @@ export default {
       this.open = true;
       this.title = 'Add ' + this.config.tableAlias
       this.form = {
-        tableName: this.config.tableName,
+        f: this.config.f,
       };
     },
     closeDialog() {
@@ -81,11 +81,11 @@ export default {
     handleExport(isAll = false) {
       const params = isAll ? {} : this.queryParams;
       const confirmMessage = `Confirm whether to export ${isAll ? 'all' : 'current'} data items?`;
-      const downloadFilename = `${this.config.tableName}${isAll ? '-all' : '-export'}.xlsx`;
+      const downloadFilename = `${this.config.f}${isAll ? '-all' : '-export'}.xlsx`;
 
       this.$modal.confirm(confirmMessage).then(() => {
         this.exportLoading = true;
-        return isAll ? exportTableExcel(this.config.exportExcelUri, this.$request, this.config.tableName) :
+        return isAll ? exportTableExcel(this.config.exportExcelUri, this.$request, this.config.f) :
           exportExcel(this.config.exportTableExcelUri, this.$request, params)
       }).then(response => {
         this.$download.excel(response.data, downloadFilename);

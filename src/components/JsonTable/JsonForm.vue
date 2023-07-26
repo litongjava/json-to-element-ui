@@ -11,6 +11,9 @@
         <el-input v-if="item.type === 'varchar'" v-model="form[item.key]"
                   :placeholder="item.placeholder"/>
 
+        <el-input v-else-if="item.type === 'bool'" v-model="form[item.key]"
+                  :placeholder="item.placeholder"/>
+
         <el-date-picker v-else-if="item.type === 'date'" v-model="form[item.key]"
                         clearable :type="item.prop.type" :value-format="item.prop.valueFormat"
                         :placeholder="item.placeholder"/>
@@ -71,7 +74,7 @@ export default {
       const {data} = await promise;
       if (data.data) {
         this.$modal.msgSuccess(`${action} Successfully`);
-        this.closeDialog()
+        this.closeDialog();
         this.queryTable();
       } else {
         this.$modal.msgError(`${action} Failed`)

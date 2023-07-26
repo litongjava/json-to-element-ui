@@ -43,7 +43,6 @@ export default {
       list: [],
       // 查询参数
       queryParams: {
-        tableName: this.config.tableName,
         pageNo: 1,
         pageSize: 10,
       },
