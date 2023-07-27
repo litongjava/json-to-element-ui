@@ -59,10 +59,11 @@ export default {
           if (this.fNames.length > 0) {
             this.currentTab = this.fNames[0];
           }
-          this.tabConfigs = this.fNames.map((f) => ({
+          let mapFunc = (f) => ({
             f,
             lang: this.config.lang,
-          }));
+          });
+          this.tabConfigs = this.fNames.map(mapFunc);
           this.loaded = true;
         })
         .catch((error) => {
@@ -131,6 +132,7 @@ export default {
   .left-panel li {
     cursor: pointer;
     padding: 10px;
+    border-bottom: 1px solid gray;
   }
 
   .left-panel li.active {

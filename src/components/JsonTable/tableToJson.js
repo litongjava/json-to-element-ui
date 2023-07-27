@@ -1,5 +1,6 @@
 // 创建元组
 export function createRecord(uri, request, data) {
+  data = { ...data };
   if (!uri) {
     uri = `/table/json/${data.f}/create`;
     delete data.f;
@@ -13,6 +14,7 @@ export function createRecord(uri, request, data) {
 
 // 更新元组
 export function updateRecord(uri, request, data) {
+  data = { ...data };
   if (!uri) {
     uri = `/table/json/${data.f}/update`;
     delete data.f;
@@ -48,6 +50,7 @@ export function getRecord(uri, request, f, id) {
 
 // 获得元组分页
 export function pageRecord(uri, request, data) {
+  data = { ...data };
   if (!uri) {
     uri = `/table/json/${data.f}/page`;
     delete data.f;
@@ -60,7 +63,8 @@ export function pageRecord(uri, request, data) {
 }
 
 // 导出Excel
-export function exportExcel(uri, request, query) {
+export function exportExcel(uri, request, data) {
+  data = { ...data };
   if (!uri) {
     uri = `/table/json/${data.f}/export-excel`;
     delete data.f;
@@ -68,7 +72,7 @@ export function exportExcel(uri, request, query) {
   return request({
     url: uri,
     method: 'get',
-    params: query,
+    params: data,
     responseType: 'blob'
   })
 }
@@ -86,6 +90,8 @@ export function exportTableExcel(uri, request, f) {
 }
 
 export function getTableConfig(uri, request, data) {
+  //这是一行很有用的代码,用于复制一份data,防止后面对data的值进行操作影响上级
+  data = { ...data };
   if (!uri) {
     uri = `/table/json/${data.f}/f-config`;
     delete data.f;
