@@ -50,8 +50,13 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   config => {
+    // token:登陆信息凭证
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.token = token;
+    }
+    // 将 application/json 请求转为 from请求
     if (config.method === 'post') {
-      // token:登陆信息凭证
       config.data = qs.stringify(config.data)
     }
     return config
