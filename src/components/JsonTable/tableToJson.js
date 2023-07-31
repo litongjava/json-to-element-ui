@@ -1,3 +1,5 @@
+import qs from "qs"
+
 // 创建元组
 export function createRecord(uri, request, data) {
   data = { ...data };
@@ -8,7 +10,7 @@ export function createRecord(uri, request, data) {
   return request({
     url: uri,
     method: 'post',
-    data: data
+    data: qs.stringify(data)
   })
 }
 
@@ -21,8 +23,8 @@ export function updateRecord(uri, request, data) {
   }
   return request({
     url: uri,
-    method: 'put',
-    data: data
+    method: 'post',
+    data: qs.stringify(data)
   })
 }
 
@@ -58,7 +60,7 @@ export function pageRecord(uri, request, data) {
   return request({
     url: uri,
     method: 'post',
-    data: data
+    data: qs.stringify(data)
   })
 }
 
