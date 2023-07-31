@@ -55,10 +55,6 @@ instance.interceptors.request.use(
     if (token) {
       config.headers.token = token;
     }
-    // 将 application/json 请求转为 from请求
-    if (config.method === 'post') {
-      config.data = qs.stringify(config.data)
-    }
     return config
   },
   error => Promise.reject(error)
