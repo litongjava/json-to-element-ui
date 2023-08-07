@@ -39,7 +39,7 @@
 
     <el-table-column label="Operation" :align="config.table.operation.align"
                      class-name="small-padding fixed-width"
-                     v-if="config.table.operation.show" width="120">
+                     v-if="config.table.operation.show" width="124">
       <template v-slot="scope">
       <el-button
         size="mini"
