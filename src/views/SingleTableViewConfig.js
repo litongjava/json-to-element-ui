@@ -1,5 +1,7 @@
 export default {
   "f": "course",
+  "idName":"id",
+  "idType":"long",
   "tableAlias": "Course",
   "pageUri": '/table/json/page',
   "getUri": '/table/json/get',

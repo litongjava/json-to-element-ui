@@ -1,7 +1,8 @@
 <template>
 <div>
   <!-- 列表 -->
-  <el-table v-loading="loading" :data="list" @row-dblclick="showContentDialog" :row-style="{ height: '30px' }">
+  <el-table v-loading="loading" :data="list" @row-dblclick="showContentDialog"
+            :row-style="{ height: '30px' }">
     <el-table-column align="center" type="selection" width="50" v-if="config.table.selectionShow"/>
     <el-table-column label="No." prop="num" align="center" width="100" v-if="config.table.numberShow">
       <template slot-scope="row">
@@ -132,13 +133,16 @@ export default {
       this.$emit('queryTable');
     },
     /** 修改按钮操作 */
-    async handleUpdate(row) {
-      const {data} = await getRecord(this.config.getUri, this.$request, this.config.f, row.id);
-      this.form = {
-        ...data.data,
-      };
-      this.open = true;
-      this.title = 'Edit ' + this.config.tableAlias
+    handleUpdate(row) {
+      getRecord(this.config.getUri, this.$request, this.config.f, this.config.idName, row.id, this.config.idType).then((resp) => {
+        debugger;
+        this.form = {
+          ...resp.data.data,
+        };
+        this.open = true;
+        this.title = 'Edit ' + this.config.tableAlias
+      });
+
     },
 
     /** 删除按钮操作 */
@@ -148,7 +152,7 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        deleteRecord(this.config.deleteUri, this.$request, this.config.f, row.id).then(() => {
+        deleteRecord(this.config.deleteUri, this.$request, this.config.f, this.config.idName, row.id, this.config.idType).then(() => {
           this.$emit('queryTable');
           this.$message({
             type: 'success',
@@ -202,7 +206,8 @@ export default {
   .el-table .cell:hover .copy-button {
     visibility: visible;
   }
-  fixed-width{
+
+  fixed-width {
     display: flex;
     /*按钮之间平均分布*/
     justify-content: space-between;
