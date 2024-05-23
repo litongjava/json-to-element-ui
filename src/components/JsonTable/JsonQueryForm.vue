@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-form :model="queryParams" ref="queryForm" :inline="true" size="small" v-show="config.query.show" class="query-form">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" size="small" v-show="config.query.show"
+             class="query-form">
       <template v-for="(item, index) in visibleItems">
         <el-form-item :key="index" :label="item.name" :prop="item.key" v-show="item.show">
           <el-input v-if="item.type === 'varchar'" v-model="queryParams[item.key]"
