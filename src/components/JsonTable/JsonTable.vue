@@ -1,83 +1,92 @@
 <template>
-<div>
-  <!-- 列表 -->
-  <el-table v-loading="loading" :data="list" @row-dblclick="showContentDialog"
-            :row-style="{ height: '30px' }">
-    <el-table-column align="center" type="selection" width="50" v-if="config.table.selectionShow"/>
-    <el-table-column label="No." prop="num" align="center" width="100" v-if="config.table.numberShow">
-      <template slot-scope="row">
-      <span>{{ row.$index+1 }}</span>
-      </template>
-    </el-table-column>
+  <div>
+    <!-- 列表 -->
+    <el-table v-loading="loading" :data="list" @row-dblclick="showContentDialog"
+              :row-style="{ height: '30px' }">
+      <el-table-column align="center" type="selection" width="50" v-if="config.table.selectionShow"/>
+      <el-table-column label="No." prop="num" align="center" width="50" v-if="config.table.numberShow">
+        <template slot-scope="row">
+          <span>{{ row.$index + 1 }}</span>
+        </template>
+      </el-table-column>
 
-    <el-table-column
-      v-for="(item, index) in config.table.items"
-      :key="index"
-      :label="item.name"
-      :prop="item.key"
-      :align="item.align"
-      :height="item.height"
-      v-if="item.show"
-      show-overflow-tooltip
-    >
-      <template v-slot="scope">
-      <div class="cell-content">
-        <span v-if="item.type === 'date'">{{ parseTime(scope.row[item.key]) }}</span>
-        <span v-else-if="item.type === 'bool'">{{ scope.row[item.key] }}</span>
-        <span v-else>{{ scope.row[item.key] }}</span>
-        <el-tooltip content="Copy"
-                    v-if="isValueNotEmpty(scope.row[item.key]) && scope.row[item.key].length > 6">
-          <el-button class="copy-button" v-clipboard:copy="scope.row[item.key]"
-                     v-clipboard:success="onCopySuccess" v-clipboard:error="onCopyError"
-                     icon="el-icon-document-copy" circle/>
-        </el-tooltip>
-      </div>
-      </template>
-    </el-table-column>
+      <el-table-column
+          v-for="(item, index) in config.table.items" v-if="item.show"
+          :key="index"
+          :label="item.name"
+          :prop="item.key"
+          :align="item.align"
+          :min-width="item.minWidth"
+          :width="item.width"
+          :height="item.height"
+          :fixed="item.fixed"
+          :sortable="item.sortable"
+          :sort-by="item.sortBy"
+          :sort-orders="item.sortOrders"
+          :resizable="item.resizable"
+          show-overflow-tooltip
+      >
+        <template v-slot="scope">
+          <div class="cell-content">
+            <span v-if="item.type === 'date'">{{ parseTime(scope.row[item.key]) }}</span>
+            <span v-else-if="item.type === 'bool'">{{ scope.row[item.key] }}</span>
+            <span v-else>{{ scope.row[item.key] }}</span>
+            <el-tooltip content="Copy"
+                        v-if="isValueNotEmpty(scope.row[item.key]) && scope.row[item.key].length > 6">
+              <el-button class="copy-button" v-clipboard:copy="scope.row[item.key]"
+                         v-clipboard:success="onCopySuccess" v-clipboard:error="onCopyError"
+                         icon="el-icon-document-copy" circle/>
+            </el-tooltip>
+          </div>
+        </template>
+      </el-table-column>
 
-    <!-- 在所有其他列之后添加新的插槽 -->
-    <slot name="extra-columns"></slot>
+      <!-- 在所有其他列之后添加新的插槽 -->
+      <slot name="extra-columns"></slot>
 
-    <el-table-column label="Operation" :align="config.table.operation.align"
-                     class-name="small-padding fixed-width"
-                     v-if="config.table.operation.show" width="124">
-      <template v-slot="scope">
-      <el-button
-        size="mini"
-        type="text"
-        icon="el-icon-edit"
-        @click="handleUpdate(scope.row)"
-        v-show="config.table.operation.updateButtonShow"
-      >{{config.table.operation.updateButtonName}}
-      </el-button>
-      <el-button
-        size="mini"
-        type="text"
-        icon="el-icon-delete"
-        @click="handleDelete(scope.row)"
-        v-show="config.table.operation.deleteButtonShow"
-      >{{config.table.operation.deleteButtonName}}
-      </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-  <!-- 分页组件 -->
-  <pagination
-    v-show="total > 0"
-    :total="total"
-    :page.sync="queryParams.pageNo"
-    :limit.sync="queryParams.pageSize"
-    @pagination="$emit('queryTable')"
-  />
+      <el-table-column label="Operation" :align="config.table.operation.align"
+                       class-name="small-padding fixed-width"
+                       v-if="config.table.operation.show" width="124">
+        <template v-slot="scope">
+          <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="handleUpdate(scope.row)"
+              v-show="config.table.operation.updateButtonShow"
+          >{{ config.table.operation.updateButtonName }}
+          </el-button>
+          <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+              v-show="config.table.operation.deleteButtonShow"
+          >{{ config.table.operation.deleteButtonName }}
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- 分页组件 -->
+    <div class="pagination-container">
+      <pagination
+          v-show="total > 0"
+          :total="total"
+          :page.sync="queryParams.pageNo"
+          :limit.sync="queryParams.pageSize"
+          @pagination="$emit('queryTable')"
+      />
+    </div>
 
-  <el-dialog :visible="contentDialogVisible" @close="contentDialogVisible = false"
-             :title="contentDialogTitle">
-    <span>{{ contentDialogContent }}</span>
-  </el-dialog>
 
-  <json-form :config="config" :showDialog="open" @closeDialog="closeDialog" :form="form" :title="title"
-             @queryTable="$emit('queryTable')"/>
-</div>
+    <el-dialog :visible="contentDialogVisible" @close="contentDialogVisible = false"
+               :title="contentDialogTitle">
+      <span>{{ contentDialogContent }}</span>
+    </el-dialog>
+
+    <json-form :config="config" :showDialog="open" @closeDialog="closeDialog" :form="form" :title="title"
+               @queryTable="$emit('queryTable')"/>
+  </div>
 </template>
 
 <script>
@@ -188,28 +197,33 @@ export default {
 </script>
 
 <style scoped>
-  .cell-content {
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.cell-content {
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  .el-table .cell .copy-button {
-    position: absolute;
-    visibility: hidden;
-    top: 50%;
-    right: -10%; /* Change this line */
-    transform: translateY(-50%);
-  }
+.el-table .cell .copy-button {
+  position: absolute;
+  visibility: hidden;
+  top: 50%;
+  right: -10%; /* Change this line */
+  transform: translateY(-50%);
+}
 
-  .el-table .cell:hover .copy-button {
-    visibility: visible;
-  }
+.el-table .cell:hover .copy-button {
+  visibility: visible;
+}
 
-  fixed-width {
-    display: flex;
-    /*按钮之间平均分布*/
-    justify-content: space-between;
-  }
+fixed-width {
+  display: flex;
+  /*按钮之间平均分布*/
+  justify-content: space-between;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+}
 </style>
