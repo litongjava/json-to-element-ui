@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import {deleteRecord, getRecord} from "./tableToJson";
+import {deleteRecord, getRecord} from "./TableApi";
 
 export default {
   name: "JsonTable",
@@ -143,7 +143,7 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      getRecord(this.config.getUri, this.$request, this.config.f, this.config.idName, row.id, this.config.idType).then((resp) => {
+      getRecord(this.config.getUri, this.$request, this.config.f, this.config.idName, row[this.config.idName], this.config.idType).then((resp) => {
         debugger;
         this.form = {
           ...resp.data.data,
@@ -161,7 +161,7 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        deleteRecord(this.config.deleteUri, this.$request, this.config.f, this.config.idName, row.id, this.config.idType).then(() => {
+        deleteRecord(this.config.deleteUri, this.$request, this.config.f, this.config.idName, row[this.config.idName], this.config.idType).then(() => {
           this.$emit('queryTable');
           this.$message({
             type: 'success',

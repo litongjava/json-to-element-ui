@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import {getTableConfig} from './tableToJson'
+import {getTableConfig} from './TableApi'
 
 export default {
   name: "SingleTableView",

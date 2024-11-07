@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import {exportTableExcel, exportExcel} from "../JsonTable/tableToJson";
+import {exportTableExcel, exportExcel} from "../JsonTable/TableApi";
 
 export default {
   name: "LeftToolBar",

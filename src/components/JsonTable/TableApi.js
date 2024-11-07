@@ -4,7 +4,7 @@ import qs from "qs"
 export function createRecord(uri, request, data) {
   data = {...data};
   if (!uri) {
-    uri = `/table/json/${data.f}/create`;
+    uri = `/api/table/${data.f}/create`;
     delete data.f;
   }
   return request({
@@ -18,7 +18,7 @@ export function createRecord(uri, request, data) {
 export function updateRecord(uri, request, data) {
   data = {...data};
   if (!uri) {
-    uri = `/table/json/${data.f}/update`;
+    uri = `/api/table/${data.f}/update`;
     delete data.f;
   }
   return request({
@@ -31,7 +31,7 @@ export function updateRecord(uri, request, data) {
 // 删除元组
 export function deleteRecordById(uri, request, f, id) {
   if (!uri) {
-    uri = `/table/json/${f}/delete`;
+    uri = `/api/table/${f}/delete`;
   }
   return request({
     url: uri + '?id=' + id,
@@ -42,7 +42,7 @@ export function deleteRecordById(uri, request, f, id) {
 // 删除元组
 export function deleteRecord(uri, request, f, name, value, type) {
   if (!uri) {
-    uri = `/table/json/${f}/delete`;
+    uri = `/api/table/${f}/delete`;
   }
   return request({
     url: uri + '?' + name + '=' + value + '&' + name + 'Type' + '=' + type,
@@ -54,7 +54,7 @@ export function deleteRecord(uri, request, f, name, value, type) {
 // 获得元组
 export function getRecordById(uri, request, f, id) {
   if (!uri) {
-    uri = `/table/json/${f}/get`;
+    uri = `/api/table/${f}/get`;
   }
   return request({
     url: uri + '?id=' + id,
@@ -64,7 +64,7 @@ export function getRecordById(uri, request, f, id) {
 
 export function getRecord(uri, request, f, name, value, type) {
   if (!uri) {
-    uri = `/table/json/${f}/get`;
+    uri = `/api/table/${f}/get`;
   }
   return request({
     url: uri + '?' + name + '=' + value + '&' + name + 'Type' + '=' + type,
@@ -76,7 +76,7 @@ export function getRecord(uri, request, f, name, value, type) {
 export function pageRecord(uri, request, data) {
   data = {...data};
   if (!uri) {
-    uri = `/table/json/${data.f}/page`;
+    uri = `/api/table/${data.f}/page`;
     delete data.f;
   }
   return request({
@@ -90,7 +90,7 @@ export function pageRecord(uri, request, data) {
 export function exportExcel(uri, request, data) {
   data = {...data};
   if (!uri) {
-    uri = `/table/json/${data.f}/export-excel`;
+    uri = `/api/table/${data.f}/export-excel`;
     delete data.f;
   }
   return request({
@@ -104,7 +104,7 @@ export function exportExcel(uri, request, data) {
 // 导出Excel
 export function exportTableExcel(uri, request, f) {
   if (!uri) {
-    uri = `/table/json/${f}/export-table-excel`;
+    uri = `/api/table/${f}/export-table-excel`;
   }
   return request({
     url: uri,
@@ -117,7 +117,7 @@ export function getTableConfig(uri, request, data) {
   //这是一行很有用的代码,用于复制一份data,防止后面对data的值进行操作影响上级
   data = {...data};
   if (!uri) {
-    uri = `/table/json/${data.f}/f-config`;
+    uri = `/api/table/${data.f}/config`;
     delete data.f;
   }
   return request({
@@ -129,7 +129,7 @@ export function getTableConfig(uri, request, data) {
 
 export function getFNames(uri, request) {
   if (!uri) {
-    uri = '/table/json/f-names';
+    uri = '/api/table/names';
   }
   return request({
     url: uri,
@@ -140,7 +140,7 @@ export function getFNames(uri, request) {
 // 导出 所有Table
 export function exportAllTableExcel(uri, request) {
   if (!uri) {
-    uri = `/table/json/export-all-table-excel`;
+    uri = `/api/table/export-all-table-excel`;
   }
   return request({
     url: uri,

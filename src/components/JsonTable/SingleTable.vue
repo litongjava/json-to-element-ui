@@ -23,7 +23,7 @@ import {
   deleteRecord,
   getRecord,
   pageRecord,
-} from './tableToJson'
+} from './TableApi'
 
 export default {
   name: 'SingleTable',

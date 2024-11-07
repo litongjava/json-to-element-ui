@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import {getFNames} from "./tableToJson";
+import {getFNames} from "./TableApi";
 
 export default {
   name: "MultiTableView",

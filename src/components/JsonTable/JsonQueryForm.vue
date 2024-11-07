@@ -6,6 +6,10 @@
         <el-form-item :key="index" :label="item.name" :prop="item.key" v-show="item.show">
           <el-input v-if="item.type === 'varchar'" v-model="queryParams[item.key]"
                     :placeholder="item.placeholder" clearable @keyup.enter.native="handleQuery"/>
+          <el-input v-if="item.type === 'int'" v-model="queryParams[item.key]"
+                    :placeholder="item.placeholder" clearable @keyup.enter.native="handleQuery"/>
+          <el-input v-if="item.type === 'long'" v-model="queryParams[item.key]"
+                    :placeholder="item.placeholder" clearable @keyup.enter.native="handleQuery"/>
           <el-input v-else-if="item.type === 'bool'" v-model="queryParams[item.key]"
                     :placeholder="item.placeholder" clearable @keyup.enter.native="handleQuery"/>
           <el-date-picker v-else-if="item.type === 'date'"

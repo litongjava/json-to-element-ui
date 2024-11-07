@@ -11,6 +11,12 @@
         <el-input v-if="item.type === 'varchar'" v-model="form[item.key]"
                   :placeholder="item.placeholder"/>
 
+        <el-input v-if="item.type === 'int'" v-model="form[item.key]"
+                  :placeholder="item.placeholder"/>
+
+        <el-input v-if="item.type === 'long'" v-model="form[item.key]"
+                  :placeholder="item.placeholder"/>
+
         <el-input v-else-if="item.type === 'bool'" v-model="form[item.key]"
                   :placeholder="item.placeholder"/>
 
@@ -28,7 +34,7 @@
 </template>
 
 <script>
-import {createRecord, updateRecord} from "./tableToJson";
+import {createRecord, updateRecord} from "./TableApi";
 
 export default {
   name: "JsonForm",
