@@ -82,6 +82,9 @@
     <el-dialog :visible="contentDialogVisible" @close="contentDialogVisible = false"
                :title="contentDialogTitle">
       <span>{{ contentDialogContent }}</span>
+      <el-button class="copy-button" v-clipboard:copy="contentDialogContent"
+                 v-clipboard:success="onCopySuccess" v-clipboard:error="onCopyError"
+                 icon="el-icon-copy-document" circle/>
     </el-dialog>
 
     <json-form :config="config" :showDialog="open" @closeDialog="closeDialog" :form="form" :title="title"
@@ -184,7 +187,7 @@ export default {
       // 复制失败
       this.$modal.msgError('Copy Failed:' + e);
     },
-    showContentDialog(row, column) {
+    showContentDialog(row, event,column) {
       this.contentDialogVisible = true;
       this.contentDialogTitle = column.label;
       this.contentDialogContent = row[column.property];
@@ -227,3 +230,4 @@ fixed-width {
   justify-content: center;
 }
 </style>
+f

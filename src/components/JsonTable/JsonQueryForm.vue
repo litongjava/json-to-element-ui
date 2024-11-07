@@ -3,14 +3,8 @@
     <el-form :model="queryParams" ref="queryForm" :inline="true" size="small" v-show="config.query.show"
              class="query-form">
       <template v-for="(item, index) in visibleItems">
-        <el-form-item :key="index" :label="item.name" :prop="item.key" v-show="item.show">
-          <el-input v-if="item.type === 'varchar'" v-model="queryParams[item.key]"
-                    :placeholder="item.placeholder" clearable @keyup.enter.native="handleQuery"/>
-          <el-input v-if="item.type === 'int'" v-model="queryParams[item.key]"
-                    :placeholder="item.placeholder" clearable @keyup.enter.native="handleQuery"/>
-          <el-input v-if="item.type === 'long'" v-model="queryParams[item.key]"
-                    :placeholder="item.placeholder" clearable @keyup.enter.native="handleQuery"/>
-          <el-input v-else-if="item.type === 'bool'" v-model="queryParams[item.key]"
+        <el-form-item :key="index" :label="`${item.name}:`" :prop="item.key" v-show="item.show">
+          <el-input v-if="item.type === 'bool'" v-model="queryParams[item.key]"
                     :placeholder="item.placeholder" clearable @keyup.enter.native="handleQuery"/>
           <el-date-picker v-else-if="item.type === 'date'"
                           v-model="queryParams[item.key]"
@@ -19,7 +13,10 @@
                           :start-placeholder="item.prop.startPlaceholder"
                           :end-placeholder="item.prop.endPlaceholder"
                           :default-time="item.prop.defaultTime"
+
           />
+          <el-input v-else v-model="queryParams[item.key]"
+                    :placeholder="item.placeholder" clearable @keyup.enter.native="handleQuery"/>
         </el-form-item>
       </template>
       <el-form-item class="form-buttons">

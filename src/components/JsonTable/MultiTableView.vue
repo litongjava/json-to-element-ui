@@ -119,7 +119,7 @@ export default {
   .left-panel {
     width: 200px;
     height: 100vh;
-    flex: 1;
+    flex: 2;
     overflow-y: auto; /* 添加这一行 */
   }
 
@@ -142,7 +142,7 @@ export default {
   .right-panel {
     width: 90vh;
     height: 70vh;
-    flex: 11;
+    flex: 10;
     padding: 0px;
   }
 </style>
